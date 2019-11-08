@@ -1,0 +1,118 @@
+<ion-content *ngIf="event" >
+  <div
+    class="header-image"
+    [ngStyle]="{
+      'background-image':
+        'url(' + environment.API + 'images/event/' + event.coverImage + ')'
+    }"
+  >
+    <ion-button [routerLink]="['/tabs', 'events']">
+      <ion-icon
+        slot="icon-only"
+        src="../../../assets/icon/back-arrow.svg"
+      ></ion-icon>
+    </ion-button>
+    <ion-fab-button
+      color="warning"
+      class="safety-button"
+      [routerLink]="['/tabs', 'safety']"
+    >
+      <ion-icon src="../../../assets/icon/safety-shield.svg"></ion-icon>
+    </ion-fab-button>
+  </div>
+  <ion-grid class="bumper">
+    <ion-row>
+      <ion-col
+        ><h1>
+          {{ event.name }} &nbsp;<small
+            style="font-size: 20px;font-weight: 300;"
+            >at</small
+          >&nbsp; {{ event.venue.name }}
+        </h1>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ul class="info">
+          <li class="price" [ngClass]="getPriceIcon()">
+            £{{ getPrice() | number: "1.2-2" }}
+          </li>
+          <li class="secondary">{{ event.secondaryInfo }}</li>
+          <li class="time">{{ getTime() }}</li>
+        </ul>
+      </ion-col>
+    </ion-row>
+    <ion-row margin-bottom>
+      <ion-col size="12">
+        <ul class="tags" *ngFor="let tag of event.tags">
+          <li>{{ tag.name }}</li>
+        </ul>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <!-- <h2>{{ event.strapline }}</h2> -->
+        <p>{{ event.description }}</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <p class="info">{{ event.venue.description }}</p>
+    </ion-row>
+
+    <ion-row *ngIf="event.ticketGuidance">
+      <ion-col
+        ><ion-icon src="../../../assets/icon/ticket.svg"></ion-icon>
+        <h1 style="display:inline; margin-left: 0.5em;">Tickets</h1></ion-col
+      >
+    </ion-row>
+    <ion-row *ngIf="event.ticketGuidance">
+      <ion-col
+        ><p>{{ event.ticketGuidance }}</p></ion-col
+      >
+    </ion-row>
+    <ion-row *ngIf="event.offers.length > 0">
+      <ion-col><h2>Offers</h2></ion-col>
+    </ion-row>
+    <ion-row *ngFor="let offer of event.offers">
+      <ion-col>
+        <ion-badge color="warning" no-margin>{{ offer.strapline }}</ion-badge>
+        <p style="margin-top: 0.4em">{{ offer.description }}</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-button class="shadow-red" shape="round">Buy Now</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="event.ticketGuidance">
+      <ion-col>
+        <h1 style="display:inline; margin-left: 0.5em;">Guestlist</h1></ion-col
+      >
+    </ion-row>
+    <ion-row *ngIf="event.ticketGuidance">
+      <ion-col
+        ><p>{{ event.ticketGuidance }}</p></ion-col
+      >
+    </ion-row>
+  </ion-grid>
+
+  <div id="map_canvas" ></div>
+  <ion-grid class="bumper" *ngIf="events.length > 0">
+    <ion-row>
+      <ion-col><h2>Upcoming Events</h2></ion-col>
+    </ion-row>
+    <app-result-item
+      *ngFor="let e of events; let i = index; let c = count"
+      [routerLink]="['/tabs', 'events', e.id, e.instanceDate]"
+      itemType="event"
+      [date]="e.instanceDate"
+      [data]="e"
+      [index]="i"
+      [count]="c"
+      [showDate]="true"
+    ></app-result-item>
+  </ion-grid>
+</ion-content>
+<!-- <div id="map_canvas"></div> -->
